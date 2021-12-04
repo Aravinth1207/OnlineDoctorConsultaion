@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import Header from './Header';
+import { Search } from '@material-ui/icons';
 
 
 const url = 'http://127.0.0.1:8000/doctor-details/';
 
 const UseEffectFetchData = () => {
   const [users,setUsers] = useState([]);
-
+  const [search,setSearch] = useState('');
   const getUsers = async () => {
     const response = await fetch(url);
     const users = await response.json();
@@ -17,16 +19,43 @@ const UseEffectFetchData = () => {
     },[]);
 
   return (
-  <>
+  <>  
+      <Header />
+            <SearchContainer>
+                <SearchBarContainer>
+                    <a><Search/></a>
+                    <SearchInput placeholder="Search for a doctor, clinic, or specialty or city" onChange={(e)=>{
+                        setSearch(e.target.value); 
+                    }} />
+                </SearchBarContainer> 
+            </SearchContainer>
+
       <Container>
-        {users.map((user => {
+        {users.filter(user=>{
+          if (search === '') {
+            return ;
+          }
+          else if(user.DoctorName.toLowerCase().includes(search.toLowerCase())){
+            return user;
+          }
+          else if(user.DoctorCity.toLowerCase().includes(search.toLowerCase())){
+            return user;
+          }
+          else if(user.DoctorSpecialization.toLowerCase().includes(search.toLowerCase())){
+            return user;
+          }
+          else if(user.DoctorClinic.ClinicName.toLowerCase().includes(search.toLowerCase())){
+            return user;
+          }
+          else{
+            return ;
+          }
+        }).
+        map((user => {
           const { id, DoctorName ,DoctorSpecialization,DoctorCity,DoctorPhone,DoctorClinic,DoctorImage } = user;
           return (
             <AppointmentContainer key={id}>
               <AppointmentCont>
-                <Profile>
-                  <img src={DoctorImage} alt="profile" />
-                </Profile>
               <AppointmentCardHeader>
                 <h3>Dr.{DoctorName}</h3>
                 <h4>{DoctorSpecialization}</h4>
@@ -51,6 +80,83 @@ const UseEffectFetchData = () => {
 
 
 export default UseEffectFetchData;
+
+
+
+const SearchContainer = styled.div`
+    border-radius: 32px;
+    height: 80px;
+    display: flex;
+    color: #fff;
+    width: 1180px;
+    zoom: 1;
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+    margin-top: 60px;
+    position: relative;
+    background-repeat: no-repeat;
+    background-size: cover;
+    @media (max-width: 768px) {
+        width:110%;
+        position: relative;
+        background-size: cover;
+        margin:auto;
+        margin-top: 72px;
+        margin-left: 10px;
+        margin-right: 14px;
+    }
+`
+
+
+const SearchBarContainer = styled.div`
+    background: linear-gradient(
+    105.21deg,#3743ab 2.85%,#141b56 99.41%);
+    border-radius: 20px;
+    height: 60px;
+    display: flex;
+    color: #fff;
+    width: 400px;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+    zoom: 1;
+    margin: auto;
+    position: relative;
+    background-repeat: no-repeat;
+    background-size: cover;
+    @media (max-width: 768px) {
+        width:100%;
+        position: relative;
+        background-size: cover;
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+        overflow: hidden;
+        margin:auto;
+    }
+    align-items: center;
+    a{
+        margin-left: 20px;
+        color: #fff;
+    }
+`
+
+const SearchInput = styled.input`
+    margin-left: 5px;
+    width: 300px;
+    height: 32px;
+    border-radius: 12px;
+    border:linear-gradient(
+        105.21deg,#3743ab 2.85%,#141b56 99.41%);
+    font-size: 14px;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    font-weight: 500;
+    outline: none;
+    padding-left: 10px;
+    @media (max-width: 768px) {
+        width:75%;
+        font-size: 14px;
+
+    }
+`
+
 
 const Profile = styled.img`
   width: 100px;
