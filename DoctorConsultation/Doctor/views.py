@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
 from .models import *
 from .serializer import *
 
@@ -17,8 +18,22 @@ def doctorList(request):
 
 @api_view(['GET'])
 def doctorDetail(request,pk):   
-    doctor = Doctor.objects.get(pk=pk)
+    doctor = Doctor.objects.get(id=pk)
     serializer = DoctorSerializer(doctor)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def doctorCity(request,city):   
+    doctor = Doctor.objects.filter(DoctorCity=city)
+    serializer = DoctorSerializer(doctor,many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def doctorSpeciality(request,speciality):
+    doctor = Doctor.objects.filter(DoctorSpecialization=speciality)
+    serializer = DoctorSerializer(doctor,many=True)
     return Response(serializer.data)
 
 @api_view(['POST'])
@@ -28,7 +43,7 @@ def addDoctor(request):
         serializer.save()
     return Response(serializer.data)
 
-@api_view(['POST'])
+@api_view(['PUT'])
 def updateDoctor(request,pk):
     doctor = Doctor.objects.get(id=pk)
     serializer = DoctorSerializer(instance=doctor,data=request.data)
@@ -61,7 +76,7 @@ def addClinic(request):
         serializer.save()
     return Response(serializer.data)
 
-@api_view(['POST'])
+@api_view(['PUT'])
 def updateClinic(request,pk):
     clinic = Clinic.objects.get(id=pk)
     serializer = ClinicSerializer(instance=clinic,data=request.data)

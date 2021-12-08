@@ -20,7 +20,7 @@ function Header() {
             </Navbar>
             <RightMenu>
                 <a href="login">Login</a>
-                <a href="#">Sign Up</a>
+                <a href="signup">Sign Up</a>
             </RightMenu>
             <CustomMenu>
                 <button type="button" className="nav-toggle" onClick={() => setBurgerStatus(true) }>
@@ -34,8 +34,8 @@ function Header() {
                 <li><a href="#">Find Doctors<p>Book an appointment</p></a></li>
                 <li><a href="#">Video Consult
                     <p>consult now</p></a></li>
-                <li><a href="#">Login</a></li>
-                <li><a href="#">Sign Up</a></li>
+                <li><a href="login">Login</a></li>
+                <li><a href="signup">Sign Up</a></li>
             </BurgerNav>
         </Container>
     )

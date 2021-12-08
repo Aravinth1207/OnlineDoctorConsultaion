@@ -2,21 +2,41 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Header from './Header';
 import { Search } from '@material-ui/icons';
+import './Modal.css';
+import {DateTimePickerComponent} from '@syncfusion/ej2-react-calendars';
 
 
-const url = 'http://127.0.0.1:8000/doctor-details/';
+const urls = ['http://127.0.0.1:8000/doctor-details/',
+              'http://127.0.0.1:8000/doctor-speciality/General/',
+              'http://127.0.0.1:8000/doctor-city/kumbakonam/',
+              'http://127.0.0.1:8000/doctor-city/chennai/' ,
+              'http://127.0.0.1:8000/doctor-city/redhills/' 
+];
 
 const UseEffectFetchData = () => {
+  const dateValue  = new Date('12/12/2021 10:00 AM');
+  const minDate  = new Date('12/12/2021 09:00 AM');
+  const maxDate  = new Date('12/12/2021 11:00 AM');
   const [users,setUsers] = useState([]);
-  const [search,setSearch] = useState('');
-  const getUsers = async () => {
-    const response = await fetch(url);
-    const users = await response.json();
-    setUsers(users);
-  }
+  const [modal,setModal] = useState(false);
+  const [search,setSearch] = useState('')
+  const [open,setOpen] = useState(false);
+    
     useEffect(() => {
-      getUsers();
-    },[]);
+      Promise.all(
+      urls.map((url) =>
+        fetch(url)
+          .then((response) => response.json())
+          .then((data) => setUsers(data))
+          .catch((error) => console.log("There was a problem!", error))
+      ),
+      []
+    );
+  }, []);
+  
+  const toggleModal = () => {
+    setModal(!modal);
+  }
 
   return (
   <>  
@@ -33,7 +53,7 @@ const UseEffectFetchData = () => {
       <Container>
         {users.filter(user=>{
           if (search === '') {
-            return ;
+            return null;
           }
           else if(user.DoctorName.toLowerCase().includes(search.toLowerCase())){
             return user;
@@ -66,13 +86,31 @@ const UseEffectFetchData = () => {
               </AppointmentCardHeader>
               </AppointmentCont>
               <BookButton>
-              <button type="button"><a href="book">Book</a></button>
+              <button type="button" onClick={toggleModal}><a href="#">Book</a></button>
               <button type="button"><a href="consult">Consult</a></button>
                 </BookButton>
-              
             </AppointmentContainer>
           );
         }))} 
+        
+          {modal && (
+            <AppointmentContainer>
+                  <div className="modal">
+                    <div onClick={toggleModal} className="overlay"></div>
+                    <div className="modal-content">
+                    <Wrapper>
+                        <DateContainer>
+                            <DateTimePickerComponent id="dateTimePicker" placeholder="Select date and time" value={dateValue} min={minDate} max={maxDate} step={15}/>    
+                        </DateContainer>
+                    </Wrapper>
+                      <button className="close-modal" onClick={toggleModal}>
+                        CLOSE
+                      </button>
+                    </div>
+                  </div>
+                </AppointmentContainer>
+                )}
+        
       </Container>
   </>
   );
@@ -80,6 +118,26 @@ const UseEffectFetchData = () => {
 
 
 export default UseEffectFetchData;
+
+
+const DateContainer = styled.div` 
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width:200px;
+  z-index: 1;
+`
+
+const Wrapper = styled.div`
+  align-items: center;
+  width: 100%;
+
+  background-color: blue;
+  justify-content: center;
+  z-index: 0;
+`
 
 
 
@@ -98,7 +156,7 @@ const SearchContainer = styled.div`
     background-repeat: no-repeat;
     background-size: cover;
     @media (max-width: 768px) {
-        width:110%;
+        width:97%;
         position: relative;
         background-size: cover;
         margin:auto;
@@ -187,14 +245,17 @@ const AppointmentCardHeader = styled.div`
     color: #000;
     h3{
         font-size: 1.5rem;
+        color:  #00A0FF;
     }
     h4{
         font-size: 1rem;
         margin-top: -20px;
+        font-weight:400;
     }
     h5{
         font-size: 0.8rem;
         margin-top: -16px;
+        font-weight:400;
         
     }
     img{
@@ -288,7 +349,7 @@ const AppointmentContainer = styled.div`
     justify-content: center;
     background-size: cover;
     @media (max-width: 768px) {
-        width:110%;
+        width:97%;
         position: relative;
         background-size: cover;
         box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);

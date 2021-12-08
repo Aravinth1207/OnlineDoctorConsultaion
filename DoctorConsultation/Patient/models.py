@@ -9,7 +9,7 @@ class Patient(models.Model):
     PatientPhone = models.CharField(max_length=100, null=False, blank=False)
     PatientAge = models.IntegerField(null=False, blank=False)
     PatientGender = models.CharField(max_length=100, null=False, blank=False)
-    
+    PatientPassword = models.CharField(max_length=100,null=True,blank=False)
 
     def __str__(self):
         return self.PatientName

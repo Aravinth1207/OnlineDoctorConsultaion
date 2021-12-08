@@ -18,6 +18,8 @@ def appointmentDetail(request, pk):
     serializer = AppointmentSerializer(appointment)
     return Response(serializer.data)
 
+
+
 @api_view(['POST'])
 def addAppointment(request):
     seriazlier = AppointmentSerializer(data=request.data)
@@ -32,6 +34,11 @@ def updateAppointment(request,pk):
     if serializer.is_valid():
         serializer.save()
     return Response(serializer.data)
+
+
+
+
+
 
 
 @api_view(['DELETE'])

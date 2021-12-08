@@ -6,8 +6,10 @@ import ConcernSmallContainer from './ConcernSmallContainer';
 function Section() {
     return (
         <>
-        <Container>
-        </Container>
+        <ContainerWrapper>
+            <Container>
+            </Container>
+        </ContainerWrapper>
         <ContainerDisplay>
             <a href="#"><SmallCont backgroundImage="consult.jpg"/></a>
             <a href="appointment"><SmallCont backgroundImage="appoint.jpg"/></a>
@@ -44,33 +46,21 @@ function Section() {
 export default Section
 
 
-const Footer = styled.div`
-    border-radius:32px;
-    background: linear-gradient(
-    105.21deg,#3743ab 2.85%,#141b56 99.41%);
-    height: 200px;
+const ContainerWrapper = styled.div`
     display: flex;
-    color: #fff;
     width: 1180px;
-    align-items: center;
     justify-content: center;
-    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
     zoom: 1;
     margin: auto;
-    margin-top: 100px;
     position: relative;
-    background-repeat: no-repeat;
-    background-size: cover;
     @media (max-width: 768px) {
         width:100%;
         position: relative;
-        margin-left: 200px;
-        margin-top: 220px;
-        background-position:center;
-        background-size: cover;
+        align-items: center;
         justify-content: center;
         overflow-X:hidden;
-        
+        justify-content:space-around;     
+        margin-left:35px;
     }  
 `
 
@@ -209,14 +199,15 @@ const Container = styled.div`
         background-size: cover;
         background-image:url('/Images/wrapImage.jpg');
         @media (max-width: 768px) {
-            width:110%;
+            width:97%;
+            align-items: center;
+            justify-content: center;
             position: relative;
             background-size: cover;
             box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
             margin:auto;
             margin-top: 72px;
-            margin-left: 10px;
-            margin-right: 14px;
+            
         }
         
 `
