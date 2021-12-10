@@ -1,7 +1,7 @@
 from .models import *
 from rest_framework import serializers
 from Doctor.serializer import DoctorSerializer
-from Patient.serializer import PatientSerializer
+from patient.serializers import PatientSerializer
 from Doctor.serializer import ClinicSerializer
 
 

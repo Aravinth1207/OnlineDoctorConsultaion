@@ -1,11 +1,23 @@
-from django.shortcuts import render
-from rest_framework import serializers
 from rest_framework.response import Response
+from .serializers import *
+from rest_framework import generics,status
 from rest_framework.decorators import api_view
-from . serializer import *
-from . models import *
-# Create your views here.
 
+# class PatientViewSet(viewsets.ModelViewSet):
+#     queryset = Patient.objects.all()
+#     serializer_class = PatientSerializer
+
+class RegisterView(generics.GenericAPIView):
+    serializer_class = RegisterSerializer
+    def post(self,request):
+        user = request.data
+        serializer = self.serializer_class(data=user)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        user_data = serializer.data
+        return Response(user_data,status=status.HTTP_201_CREATED)
+    
+    
 @api_view(['GET'])
 def patientList(request):
     patients = Patient.objects.all()
@@ -23,6 +35,7 @@ def addPatient(request):
     serializer = PatientSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
+    
     return Response(serializer.data)
 
 @api_view(['POST'])

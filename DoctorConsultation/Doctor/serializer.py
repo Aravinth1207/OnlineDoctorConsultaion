@@ -1,6 +1,6 @@
-from re import S
 from . models import *
 from rest_framework import serializers
+
 
 
 class ClinicSerializer(serializers.ModelSerializer):

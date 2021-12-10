@@ -1,6 +1,6 @@
 from django.db import models
 from Doctor.models import *
-from Patient.models import Patient
+from patient.models import Patient
 
 
 
@@ -21,4 +21,4 @@ class Appointment(models.Model):
     AppointmentStatus = models.CharField(max_length=100, null=False, blank=False,default='Pending')
     AppointmentCreatedAt = models.DateTimeField(auto_now_add=True)
     def __str__(self):
-        return f"{self.AppointmentPatient.PatientName}'s Appointment"
+        return f"{self.AppointmentPatient.Name}'s Appointment"
