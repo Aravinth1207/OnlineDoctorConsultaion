@@ -29,6 +29,7 @@ class App extends Component {
     this.state = {
       fullName: null,
       email: null,
+      userName: null,
       password: null,
       phone: null,
       gender:null,
@@ -36,6 +37,7 @@ class App extends Component {
       formErrors: {
         fullName: "",
         email: "",
+        userName:'',
         phone:"",
         password: "",
         gender:"",
@@ -46,17 +48,25 @@ class App extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-     Axios.post("http://127.0.0.1:8000/add-patient/", {
-        PatientName:this.state.fullName,
-        PatientEmail:this.state.email,
-        PatientPhone:this.state.phone,
-        PatientPassword:this.state.password,
-        PatientGender:this.state.gender,
-        PatientAge:this.state.age
+     fetch("http://127.0.0.1:8000/patientregister/",
+      {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'
+          ,'Accept': 'application/json'},
+    
+        body: JSON.stringify({
+        username:this.state.userName,
+        email:this.state.email,
+        password:this.state.password,
+        gender:this.state.gender,
+        age:this.state.age,
+        mobile:this.state.phone,
+        Name:this.state.fullName,
 
       })
     
-  };
+  });
+}
 
   handleChange = e => {
     e.preventDefault();
@@ -99,7 +109,7 @@ class App extends Component {
       <div className="wrapper">
         <div className="form-wrapper">
           <h1>Create Account</h1>
-          <form onSubmit={this.handleSubmit} noValidate>
+          <form onSubmit={this.handleSubmit} Validate>
             <div className="fullName">
               <label htmlFor="fullName">Name</label>
               <input
@@ -112,6 +122,20 @@ class App extends Component {
               />
               {formErrors.fullName.length > 0 && (
                 <span className="errorMessage">{formErrors.fullName}</span>
+              )}
+            </div>
+            <div className="userName">
+              <label htmlFor="userName">Username</label>
+              <input
+                className={formErrors.userName.length > 0 ? "error" : null}
+                placeholder="Username"
+                type="text"
+                name="userName"
+                noValidate
+                onChange={this.handleChange}
+              />
+              {formErrors.userName.length > 0 && (
+                <span className="errorMessage">{formErrors.userName}</span>
               )}
             </div>
             <div className="phone">
@@ -186,7 +210,7 @@ class App extends Component {
             </div>
 
             <div className="createAccount">
-              <button type="submit" onClick={this.handleSubmit} onClick="location.href = '/home'; ">Create Account</button>
+              <button type="submit" onClick={event =>  window.location.href='login/'}>Create Account</button>
               <a href="login"><small>Already Have an Account?</small></a>
             </div>
           </form>
